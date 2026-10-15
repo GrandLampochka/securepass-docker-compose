@@ -1,0 +1,61 @@
+services:
+
+  frontend:
+    build: ./frontend
+    container_name: securepass-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - securepass-network
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: securepass-backend
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      CRYPTO_SERVICE_URL: http://web-service:8001
+    depends_on:
+      db:
+        condition: service_healthy
+      web-service:
+        condition: service_started
+    networks:
+      - securepass-network
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: securepass-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U securepass -d securepass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - securepass-network
+    restart: unless-stopped
+
+  web-service:
+    build: ./web-service
+    container_name: securepass-web-service
+    networks:
+      - securepass-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  securepass-network:
+    driver: bridge

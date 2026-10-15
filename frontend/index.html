@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SecurePass — Security Toolkit</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+<div class="container">
+
+<header class="header">
+  <div class="brand">
+    <div class="logo">♙</div>
+    <div>
+      <h1>SecurePass</h1>
+      <p>Генератор безопасных паролей и криптографических хэшей</p>
+    </div>
+  </div>
+  <span class="version">Security Toolkit / v1.0</span>
+</header>
+
+<main class="tools">
+
+<section class="panel password-panel">
+  <h2>Генератор паролей</h2>
+
+  <label for="length">Длина пароля</label>
+  <input id="length" type="number" min="8" max="128" value="16">
+
+  <div class="options">
+    <label><input id="uppercase" type="checkbox" checked> A–Z</label>
+    <label><input id="lowercase" type="checkbox" checked> a–z</label>
+    <label><input id="digits" type="checkbox" checked> 0–9</label>
+    <label><input id="symbols" type="checkbox" checked> Символы</label>
+  </div>
+
+  <button id="generatePassword" class="btn btn-green">
+    Сгенерировать пароль
+  </button>
+
+  <div class="output">
+    <code id="passwordResult">Результат появится здесь</code>
+    <button class="copy" data-copy="passwordResult" title="Копировать">▢</button>
+  </div>
+</section>
+
+<section class="panel hash-panel">
+  <h2>Генератор хэшей</h2>
+
+  <label for="hashText">Исходный текст</label>
+  <textarea id="hashText" placeholder="Введите текст"></textarea>
+
+  <label for="algorithm">Алгоритм</label>
+  <select id="algorithm">
+    <option value="sha256">SHA-256</option>
+    <option value="bcrypt">bcrypt</option>
+  </select>
+
+  <button id="generateHash" class="btn btn-blue">
+    Создать хэш
+  </button>
+
+  <div class="output">
+    <code id="hashResult">Результат появится здесь</code>
+    <button class="copy" data-copy="hashResult" title="Копировать">▢</button>
+  </div>
+</section>
+
+</main>
+
+<section class="audit-panel">
+
+  <div class="audit-header">
+    <h2>Журнал безопасности</h2>
+    <div class="audit-actions">
+      <button id="refreshAudit" class="btn-outline">↻ Обновить</button>
+      <button id="clearAudit" class="btn-outline">♧ Очистить журнал</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Операция</th>
+          <th>Алгоритм</th>
+          <th>Статус</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody id="auditBody">
+        <tr><td colspan="5">Загрузка...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<footer>
+  <span>SecurePass © 2026 · Docker Compose Laboratory #22</span>
+  <span>IT Security · Cryptography · Docker</span>
+</footer>
+
+</div>
+</body>
+</html>
